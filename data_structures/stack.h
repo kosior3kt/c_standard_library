@@ -29,14 +29,16 @@ typedef struct {
 }stack_s;
 
 ///////////////////////////// DECLARATIONS
-void  stack_init(stack_s*, const uint, arena_s*);
-void  stack_add(stack_s*, void*);
-void* stack_pop(stack_s*);
-bool  stack_is_empty(stack_s*);
-void  stack_print(stack_s*);
+static void  stack_init(stack_s*, const uint, arena_s*);
+static void  stack_add(stack_s*, void*);
+static void* stack_pop(stack_s*);
+static void* stack_peek(stack_s*);
+static bool  stack_is_empty(stack_s*);
+static void  stack_print(stack_s*);
 
 ///////////////////////////// DEFINITIONS
-void stack_init(stack_s* _stack, const uint _size, arena_s* _arena)
+static void
+stack_init(stack_s* _stack, const uint _size, arena_s* _arena)
 {
 	if(_arena == NULL) {
 		da_init(&_stack->data_, _size, NULL);
@@ -48,7 +50,8 @@ void stack_init(stack_s* _stack, const uint _size, arena_s* _arena)
 	if(_stack->max_size <= 0) _stack->max_size = 1;
 }
 
-void stack_add(stack_s* _stack, void* _value)
+static void
+stack_add(stack_s* _stack, void* _value)
 {
 	if(_stack->current_size >= _stack->max_size) {
 		_stack->max_size *= 2;
@@ -59,11 +62,11 @@ void stack_add(stack_s* _stack, void* _value)
 	++_stack->current_size;
 }
 
-void* stack_pop(stack_s* _stack)
+static void*
+stack_pop(stack_s* _stack)
 {
 	if(_stack->current_size <= 0) {
-		perror("stack is empty\n");
-		assert(0);
+		return NULL;
 	}
 
 	--_stack->current_size;
@@ -71,18 +74,32 @@ void* stack_pop(stack_s* _stack)
 	return ret_val;
 }
 
-bool stack_is_empty(stack_s* _stack)
+static void*
+stack_peek(stack_s* _stack)
+{
+	if(_stack->current_size <= 0) {
+		perror("stack is empty\n");
+		assert(0);
+	}
+
+	void* ret_val = da_get_at(&_stack->data_, _stack->current_size - 1);
+	return ret_val;
+}
+
+static bool
+stack_is_empty(stack_s* _stack)
 {
 	//printf("test me! (stack_is_empty)");
 	return (_stack->current_size == 0);
 }
 
-void stack_print(stack_s* _stack)
+static void
+stack_print(stack_s* _stack)
 {
 	uint index = _stack->current_size;
 	while(index > 0) {
 		--index;
-		printf("%d, ", (int)da_get_at(&_stack->data_, index));
+		//printf("%d, ", (int)da_get_at(&_stack->data_, index));
 	}
 }
 

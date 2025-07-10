@@ -121,14 +121,38 @@ arena_concat_string(arena_s* _arena, const char* _first, const char* _second)
 		new_string[i] = _first[i];
 		++i;
 	}
-
 	unsigned j = 0;
 	for(j = 0; _second[j] != '\0'; ++j) {
 		new_string[i + j] = _second[j];
 	}
-	//new_string[i + j + 1] = '\0';
+	//make sure it's null terminated
+	new_string[i + j] = '\0';
 	return new_string;
 }
+
+static char*
+arena_concat_string_n(arena_s* _arena, const char* _first, const char* _second, unsigned _n)
+{
+	///if these are not null terminated then unlucky
+	unsigned alloc_size = strlen(_first) + _n + 1;
+	char* new_string = get_raw_memory(_arena, alloc_size * sizeof(char));
+
+	unsigned i = 0;
+	while(_first[i] != '\0') {
+		new_string[i] = _first[i];
+		++i;
+	}
+
+	unsigned j = 0;
+	for(j = 0; j < _n; ++j) {
+		new_string[i + j] = _second[j];
+	}
+	//make sure it's null terminated
+	new_string[i + j] = '\0';
+
+	return new_string;
+}
+
 
 #undef DEFAULT_CAPACITY
 #endif// __ARENA__

@@ -18,16 +18,17 @@ typedef struct {
 }dynamic_array_s;
 
 ///////////////////////////// DECLARATIONS
-void  da_init(dynamic_array_s*, const uint, arena_s*);
-void  da_free(dynamic_array_s*);
-void  da_resize(dynamic_array_s*, const int);
-void  da_append(dynamic_array_s*, void*);
-void* da_get_at(dynamic_array_s*, const uint);
-void  da_add_at(dynamic_array_s*, const uint, void*);
-void  da_print(dynamic_array_s*);
+static void  da_init(dynamic_array_s*, const uint, arena_s*);
+static void  da_free(dynamic_array_s*);
+static void  da_resize(dynamic_array_s*, const int);
+static void  da_append(dynamic_array_s*, void*);
+static void* da_get_at(const dynamic_array_s*, const uint);
+static void  da_add_at(dynamic_array_s*, const uint, void*);
+static void  da_print(dynamic_array_s*);
 
 ///////////////////////////// IMPLEMENTATIONS
-void da_init(dynamic_array_s* _array, const uint _size, arena_s* _arena)
+static void
+da_init(dynamic_array_s* _array, const uint _size, arena_s* _arena)
 {
 	uint real_size = (_size != 0) ? _size : DEFAULT_SIZE;
 	assert(real_size > 0);
@@ -48,7 +49,8 @@ void da_init(dynamic_array_s* _array, const uint _size, arena_s* _arena)
 	assert(_array->data != NULL);
 }
 
-void da_free(dynamic_array_s* _array)
+static void
+da_free(dynamic_array_s* _array)
 {
 	assert(_array != NULL);
 	assert(_array->data != NULL);
@@ -58,7 +60,8 @@ void da_free(dynamic_array_s* _array)
 	}
 }
 
-void da_resize(dynamic_array_s* _array, const int _new_size)
+static void
+da_resize(dynamic_array_s* _array, const int _new_size)
 {
 	assert(_array != NULL);
 	assert(_array->data != NULL);
@@ -83,7 +86,8 @@ void da_resize(dynamic_array_s* _array, const int _new_size)
 	assert(_array->data != NULL);
 }
 
-void da_append(dynamic_array_s* _array, void* _val)
+static void
+da_append(dynamic_array_s* _array, void* _val)
 {
 	assert(_array != NULL);
 	assert(_array->data != NULL);
@@ -96,7 +100,8 @@ void da_append(dynamic_array_s* _array, void* _val)
 	++(_array->current_size);
 }
 
-void da_add_at(dynamic_array_s* _array, const uint _index, void* _val)
+static void
+da_add_at(dynamic_array_s* _array, const uint _index, void* _val)
 {
 	assert(_array != NULL);
 	assert(_array->data != NULL);
@@ -106,7 +111,8 @@ void da_add_at(dynamic_array_s* _array, const uint _index, void* _val)
 	_array->data[_index] = _val;
 }
 
-void* da_get_at(dynamic_array_s* _array, const uint _index)
+static void*
+da_get_at(const dynamic_array_s* _array, const uint _index)
 {
 	assert(_array != NULL);
 	assert(_array->data != NULL);
@@ -115,7 +121,8 @@ void* da_get_at(dynamic_array_s* _array, const uint _index)
 	return _array->data[_index];
 }
 
-void da_print(dynamic_array_s* _array)
+static void
+da_print(dynamic_array_s* _array)
 {
 	for(int i = 0; i < _array->current_size; ++i) {
 		printf("%d, ", da_get_at(_array, i));
